@@ -3,4 +3,4 @@ project(Saper)
 
 set(CMAKE_CXX_STANDARD 14)
 
-add_executable(Saper main.cpp MinesweeperBoard.cpp MinesweeperBoard.h)
+add_executable(Saper main.cpp MinesweeperBoard.cpp)

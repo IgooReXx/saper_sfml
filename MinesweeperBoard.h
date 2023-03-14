@@ -30,11 +30,13 @@ class MinesweeperBoard
     // przypadku wygodne
     int width;                // rzeczywista szerokość planszy
     int height;               // rzeczywista wysokość planszy
-    void board_init();
+    void board_clear();
     void board_debug_field();
+    void board_field_randomize(GameMode mode);
+    void board_debug_field2();
 public:
     MinesweeperBoard();
-    MinesweeperBoard(int width, int height, GameMode mdoe);
+    MinesweeperBoard(int width, int height, GameMode mode);
     void debug_display() const;
 };
 
