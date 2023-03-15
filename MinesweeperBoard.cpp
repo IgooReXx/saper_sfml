@@ -23,10 +23,19 @@ MinesweeperBoard::MinesweeperBoard(int width, int height, GameMode mode)
 {
     this->width=width;
     this->height=height;
+    calculate_mineAmount(mode);
     board_clear();
-    board_field_randomize(mode);
-    //board_debug_field();
-    //board_debug_field();
+    board[1][0].isRevealed=true;
+    if(mode != DEBUG)
+    {
+        board_field_randomize();
+    }
+    else
+    {
+        //board_debug_field();
+        board_debug_field2();
+    }
+
 }
 
 //==============================
@@ -58,6 +67,7 @@ void MinesweeperBoard::debug_display() const
         }
         std::cout << std::endl;
     }
+    std::cout << countMines(1,0) << std::endl;
 }
 
 //====================================
@@ -123,27 +133,9 @@ void MinesweeperBoard::board_debug_field2()
 //Funkcja randomizuje rozkład min na planszy
 //IN: mode - tryb gry, decyduje o mineAmount
 //==========================================
-void MinesweeperBoard::board_field_randomize(GameMode mode)
+void MinesweeperBoard::board_field_randomize()
 {
     int boardSize=width*height;
-    int mineAmount;
-
-    switch(mode)
-    {
-        case EASY:
-            mineAmount = std::ceil(boardSize*0.1);
-            break;
-        case NORMAL:
-            mineAmount = std::ceil(boardSize*0.2);
-            break;
-        case HARD:
-            mineAmount = std::ceil(boardSize*0.3);
-            break;
-        case DEBUG:
-            board_debug_field2();
-            return;
-    }
-
     std::vector<int> indxList;
     for(int indx=0; indx<boardSize; indx++)
     {
@@ -159,4 +151,107 @@ void MinesweeperBoard::board_field_randomize(GameMode mode)
         col=indxList[mineNo]%width;
         board[row][col].hasMine=true;
     }
+}
+
+void MinesweeperBoard::calculate_mineAmount(GameMode mode)
+{
+    int boardSize=width*height;
+    switch(mode)
+    {
+        case EASY:
+            mineAmount = std::ceil(boardSize*0.1);
+            break;
+        case NORMAL:
+            mineAmount = std::ceil(boardSize*0.2);
+            break;
+        case HARD:
+            mineAmount = std::ceil(boardSize*0.3);
+            break;
+        case DEBUG:
+            if(width<height)
+            {
+                mineAmount=width;
+            }
+            else
+            {
+                mineAmount=height;
+            }
+
+            mineAmount= mineAmount + width + (height/2)-1;
+            break;
+
+    }
+}
+
+// simple getters - return appropriate values (passed to or calculated in constructor)
+int MinesweeperBoard::getBoardWidth() const
+{
+    return width;
+}
+int MinesweeperBoard::getBoardHeight() const
+{
+    return height;
+}
+int MinesweeperBoard::getMineCount() const
+{
+    return mineAmount;
+}
+
+bool MinesweeperBoard::is_inside_board(int row, int col) const
+{
+    if(row<0 or row>height or col<0 or col>width)
+    {
+        return false;
+    }
+    else
+    {
+        return true;
+    }
+}
+
+bool MinesweeperBoard::check_for_mine(int row, int col) const
+{
+    if(is_inside_board(row, col)==true)
+    {
+        if(board[row][col].hasMine==true)
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
+int MinesweeperBoard::countMines(int row, int col) const
+{
+    if(board[row][col].isRevealed==false)
+    {
+        return -1;
+    }
+    if(is_inside_board(row, col)==false)
+    {
+        return -1;
+    }
+
+    int mineCount=0;
+    int rowChk=row-1;
+    int colChk;
+
+    for(int rowIndx=0; rowIndx<3; rowIndx++)
+    {
+        rowChk+=rowIndx;
+        colChk=col-1;
+        for(int colIndx=0; colIndx<3; colIndx++)
+        {
+            colChk+=colIndx;
+            if(check_for_mine(rowChk,colChk))
+            {
+                mineCount++;
+            }
+        }
+    }
+    if(board[row][col].hasMine==true)
+    {
+        mineCount--;
+    }
+    return mineCount;
 }
