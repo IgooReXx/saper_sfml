@@ -1,7 +1,6 @@
 #include "MinesweeperBoard.h"
-
 int main() {
-    MinesweeperBoard plansza(8,7,DEBUG);
+    MinesweeperBoard plansza(10,10,DEBUG);
     plansza.debug_display();
 
 }
