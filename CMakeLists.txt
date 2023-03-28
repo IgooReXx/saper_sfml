@@ -3,4 +3,4 @@ project(Saper)
 
 set(CMAKE_CXX_STANDARD 14)
 
-add_executable(Saper main.cpp MinesweeperBoard.cpp)
+add_executable(Saper main.cpp MinesweeperBoard.cpp MSBoardTextView.cpp MSBoardTextView.h MSTextController.cpp MSTextController.h)

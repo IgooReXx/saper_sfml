@@ -7,7 +7,6 @@
 #include <algorithm>
 #include <vector>
 #include <random>
-#include <chrono>
 
 
 MinesweeperBoard::MinesweeperBoard()
@@ -141,8 +140,9 @@ void MinesweeperBoard::board_field_randomize()
     {
         indxList.push_back(indx);
     }
-    unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
-    shuffle (indxList.begin(), indxList.end(), std::default_random_engine(seed));
+    std::random_device rd;
+    std::mt19937 g(rd());                                   // Inicjacja 3. argumentu z https://en.cppreference.com/w/cpp/algorithm/random_shuffle
+    shuffle (indxList.begin(), indxList.end(), g);
 
     int row, col;
     for(int mineNo=0; mineNo<mineAmount; mineNo++)
@@ -199,7 +199,7 @@ int MinesweeperBoard::getMineCount() const
 
 bool MinesweeperBoard::is_inside_board(int row, int col) const
 {
-    if(row<0 or row>height or col<0 or col>width)
+    if(row<0 or row>height-1 or col<0 or col>width-1)
     {
         return false;
     }
@@ -209,25 +209,13 @@ bool MinesweeperBoard::is_inside_board(int row, int col) const
     }
 }
 
-bool MinesweeperBoard::check_for_mine(int row, int col) const
-{
-    if(is_inside_board(row, col))
-    {
-        if(board[row][col].hasMine)
-        {
-            return true;
-        }
-    }
-    return false;
-}
-
 int MinesweeperBoard::countMines(int row, int col) const
 {
-    if(!board[row][col].isRevealed)
+    if(!is_inside_board(row, col))
     {
         return -1;
     }
-    if(!is_inside_board(row, col))
+    if(!board[row][col].isRevealed)
     {
         return -1;
     }
@@ -241,7 +229,7 @@ int MinesweeperBoard::countMines(int row, int col) const
         colChk=col-1;
         for(int colIndx=0; colIndx<3; colIndx++)
         {
-            if(check_for_mine(rowChk,colChk))
+            if(hasMine(rowChk,colChk))
             {
                 mineCount++;
             }
@@ -274,7 +262,14 @@ void MinesweeperBoard::toggleFlag(int row, int col)
     if(board[row][col].isRevealed) return;
     if(state != RUNNING) return;
 
-    board[row][col].hasFlag=true;
+    if(!board[row][col].hasFlag)
+    {
+        board[row][col].hasFlag=true;
+    }
+    else
+    {
+        board[row][col].hasFlag=false;
+    }
 }
 
 void MinesweeperBoard::revealField(int row, int col)
@@ -284,14 +279,20 @@ void MinesweeperBoard::revealField(int row, int col)
     if(state != RUNNING) return;
     if(board[row][col].hasFlag) return;
 
-    if(board[row][col].hasMine)
+    if(!board[row][col].hasMine)
     {
+        moveNo++;
+        board[row][col].isRevealed=true;
+        isFirstMove=false;
+        return;
+    }
+
         bool mineMoved=false;
         if(isFirstMove and mode!=DEBUG)
         {
-            for(int rowindx=0; rowindx<height; rowindx++)
+            for(int rowindx=0; rowindx<width; rowindx++)
             {
-                for(int colindx=0; colindx<width; colindx++)
+                for(int colindx=0; colindx<height; colindx++)
                 {
                     if(!board[rowindx][colindx].hasMine)
                     {
@@ -312,10 +313,6 @@ void MinesweeperBoard::revealField(int row, int col)
         }
         board[row][col].isRevealed=true;
         state=FINISHED_LOSS;
-        return;
-    }
-
-    board[row][col].isRevealed=true;
 
 }
 
@@ -338,6 +335,7 @@ GameState MinesweeperBoard::getGameState() const
 
 bool MinesweeperBoard::hasMine(int row, int col) const
 {
+    if(!is_inside_board(row,col)) return false;
     if(board[row][col].hasMine)
     {
         return true;
@@ -354,4 +352,12 @@ char MinesweeperBoard::getFieldInfo(int row, int col) const
     if(isRevealed(row, col) and countMines(row, col)==0) return ' ';
     if(isRevealed(row, col) and countMines(row, col)>0) return countMines(row, col)+'0';
     return '0';
+}
+
+void MinesweeperBoard::checkForWinCondition()
+{
+    if(moveNo==(width*height-mineAmount))
+    {
+        state=FINISHED_WIN;
+    }
 }

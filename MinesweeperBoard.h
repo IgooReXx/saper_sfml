@@ -32,16 +32,49 @@ class MinesweeperBoard
     int width;                // rzeczywista szerokość planszy
     int height;               // rzeczywista wysokość planszy
     int mineAmount;           // ilość min na planszy
+    int moveNo=0;
     GameMode mode;            // aktualny tryb gry
     GameState state;          // aktualny stan gry
     bool isFirstMove=true;
+    /*
+        Calculates number of mines based on set difficulty.
+        0.1 * board size for EASY
+        0.2 * board size for NORMAL
+        0.3 * board size for HARD
+        And assigns value calculated to mineAmount.
+    */
+
     void calculate_mineAmount();
+
+    /*
+        Clears all board fields, by setting all of field contents to false.
+    */
+
     void board_clear();
+
+    /*
+        Sets up a predefined mine placement for a board.
+    */
+
     void board_debug_field();
-    void board_field_randomize();
     void board_debug_field2();
+
+    /*
+        Randomizes placement of mines on the board.
+    */
+
+    void board_field_randomize();
+
+    /*
+        Checks whether a field is inside of the board.
+     */
+
     bool is_inside_board(int row, int col) const;
-    bool check_for_mine(int row, int col) const;
+
+    /*
+        Checks for mine inside a field.
+     */
+
     bool hasMine(int row, int col) const;
 public:
     MinesweeperBoard();
@@ -120,6 +153,9 @@ public:
      if the field is revealed and has some mines around     - return '1' ... '8' (number of mines as a digit)
      */
     char getFieldInfo(int row, int col) const;
+
+
+    void checkForWinCondition();
 
 };
 
