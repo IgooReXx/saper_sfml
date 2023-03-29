@@ -356,7 +356,7 @@ char MinesweeperBoard::getFieldInfo(int row, int col) const
 
 void MinesweeperBoard::checkForWinCondition()
 {
-    if(moveNo==(width*height-mineAmount))
+    if((moveNo)==((width*height)-mineAmount))
     {
         state=FINISHED_WIN;
     }

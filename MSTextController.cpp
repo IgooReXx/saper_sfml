@@ -16,7 +16,6 @@ void MSTextController::play()
     int row, col;
     while(board.getGameState()==RUNNING)
     {
-        board.checkForWinCondition();
         view.display();
         std::cout<<"Choose your action:" << std::endl;
         std::cout<<"1. Reveal field." << std::endl;
@@ -63,7 +62,7 @@ void MSTextController::play()
             default:
                 break;
         }
-
+        board.checkForWinCondition();
     }
     if(board.getGameState()==FINISHED_LOSS)
     {
