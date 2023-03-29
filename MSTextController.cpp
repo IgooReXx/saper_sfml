@@ -3,14 +3,17 @@
 //
 
 #include "MSTextController.h"
+#include <string>
 #include <iostream>
+#include <cctype>
 
 MSTextController::MSTextController(MinesweeperBoard &b, MSBoardTextView &v) : board(b), view(v)
 {}
 void MSTextController::play()
 {
-    int input=' ';
-    int row=0,col=0;
+    int input;
+    std::string rowstr,colstr;
+    int row, col;
     while(board.getGameState()==RUNNING)
     {
         board.checkForWinCondition();
@@ -24,16 +27,37 @@ void MSTextController::play()
         {
             case 1:
                 std::cout << "Input row number:";
-                std::cin >> row;
+                std::cin >> rowstr;
+                if(!checkForInteger(rowstr))
+                {
+                    break;
+                }
+                row = std::stoi(rowstr);
                 std::cout << "Input column number:";
-                std::cin >> col;
+
+                std::cin >> colstr;
+                if(!checkForInteger(colstr))
+                {
+                    break;
+                }
+                col = std::stoi(colstr);
                 board.revealField(row,col);
                 break;
             case 2:
                 std::cout << "Input row number:";
-                std::cin >> row;
+                std::cin >> rowstr;
+                if(!checkForInteger(rowstr))
+                {
+                    break;
+                }
+                row = std::stoi(rowstr);
                 std::cout << "Input column number:";
-                std::cin >> col;
+                std::cin >> colstr;
+                if(!checkForInteger(colstr))
+                {
+                    break;
+                }
+                col = std::stoi(colstr);
                 board.toggleFlag(row, col);
                 break;
             default:
@@ -49,4 +73,16 @@ void MSTextController::play()
     {
         std::cout << "Game won." << std::endl;
     }
+}
+
+bool MSTextController::checkForInteger(std::string str)
+{
+    for(int indx=0; indx<str.length(); indx++)
+    {
+        if(!isdigit(str[indx]))
+        {
+            return false;
+        }
+    }
+    return true;
 }
