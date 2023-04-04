@@ -11,18 +11,21 @@ MSTextController::MSTextController(MinesweeperBoard &b, MSBoardTextView &v) : bo
 {}
 void MSTextController::play()
 {
-    int input;
-    std::string rowstr,colstr;
-    int row, col;
+    std::string rowstr,colstr, input;
+    int row, col, token;
     while(board.getGameState()==RUNNING)
     {
+        token=0;
         view.display();
         std::cout<<"Choose your action:" << std::endl;
         std::cout<<"1. Reveal field." << std::endl;
         std::cout<<"2. Place/Remove flag." << std::endl;
         std::cin >> input;
-
-        switch(input)
+        if(checkForInteger(input))
+        {
+            token = std::stoi(input);
+        }
+        switch(token)
         {
             case 1:
                 std::cout << "Input row number:";
