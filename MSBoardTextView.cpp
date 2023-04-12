@@ -11,7 +11,7 @@ char MSBoardTextView::field_char(int row, int col)
 {
     if(board.getFieldInfo(row, col)=='_')
     {
-        return 37;
+        return ' ';
     }
         return board.getFieldInfo(row, col);
 }
