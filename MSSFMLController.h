@@ -12,11 +12,12 @@
 class MSSFMLController {
     MinesweeperBoard &board;
     MSSFMLView &view;
+    sf::RenderWindow &window;
     bool isInsideArea(int xpos, int ypos);
-    bool isInsideField(int xpos, int ypos);
+    bool isInsideField(sf::Event &event);
 public:
-    MSSFMLController(MinesweeperBoard &b, MSSFMLView &v);
-    void play();
+    MSSFMLController(MinesweeperBoard &b, MSSFMLView &v, sf::RenderWindow &w);
+    void play(sf::Event &event);
 
 };
 

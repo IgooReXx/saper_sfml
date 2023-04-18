@@ -13,13 +13,36 @@ int main() {
     //ctrl.play();
 
 
-    MinesweeperBoard board(8, 7, DEBUG);
+    MinesweeperBoard board(8, 7, EASY);
     MSSFMLView view (board);
 
     //board.toggleFlag(0,0);
     //board.revealField(2,3);
-    MSSFMLController ctrl(board, view);
-    ctrl.play();
+
+    sf::RenderWindow window(sf::VideoMode(800,600), "Grafika w C++/SFML");
+    window.setVerticalSyncEnabled(false);
+    window.setFramerateLimit(30);
+
+    MSSFMLController ctrl(board, view, window);
+
+    while (window.isOpen())
+    {
+        sf::Event event;
+        while (window.pollEvent(event))
+        {
+            if (event.type == sf::Event::Closed)
+                window.close();
+            else if(event.type == sf::Event::MouseButtonPressed)
+            {
+                ctrl.play(event);
+            }
+        }
+
+
+        window.clear();
+        view.draw(window);
+        window.display();
+    }
 
     return 0;
 
