@@ -13,7 +13,7 @@ int main() {
     //ctrl.play();
 
 
-    MinesweeperBoard board(8, 7, EASY);
+    MinesweeperBoard board(8, 7, DEBUG);
     MSSFMLView view (board);
 
     //board.toggleFlag(0,0);
@@ -27,6 +27,10 @@ int main() {
 
     while (window.isOpen())
     {
+        if(board.getGameState()!=RUNNING)
+        {
+            break;
+        }
         sf::Event event;
         while (window.pollEvent(event))
         {

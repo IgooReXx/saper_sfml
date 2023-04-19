@@ -11,7 +11,7 @@ MSSFMLController::MSSFMLController(MinesweeperBoard &b, MSSFMLView &v, sf::Rende
 
 void MSSFMLController::play(sf::Event &event)
 {
-    if(!isInsideArea(event.mouseButton.x, event.mouseButton.y))
+    if(!isInsideArea(event))
     {
         return;
     }
@@ -24,6 +24,7 @@ void MSSFMLController::play(sf::Event &event)
     if (event.mouseButton.button == sf::Mouse::Left)
     {
         board.revealField(row, col);
+        board.checkForWinCondition();
     }
     else if (event.mouseButton.button == sf::Mouse::Right)
     {
@@ -32,14 +33,14 @@ void MSSFMLController::play(sf::Event &event)
 }
 
 
-bool MSSFMLController::isInsideArea(int xpos, int ypos)
+bool MSSFMLController::isInsideArea(sf::Event &event)
 {
     int xSize=view.get_squareSize()*board.getBoardWidth()+view.get_offset()*(board.getBoardWidth()-1);
     int ySize=view.get_squareSize()*board.getBoardHeight()+view.get_offset()*(board.getBoardHeight()-1);
-    if(xpos<view.get_starting_xpos()) return false;
-    if(ypos<view.get_starting_ypos()) return false;
-    if(xpos>(view.get_starting_xpos()+xSize)) return false;
-    if(ypos>(view.get_starting_ypos()+ySize)) return false;
+    if(event.mouseButton.x<view.get_starting_xpos()) return false;
+    if(event.mouseButton.y<view.get_starting_ypos()) return false;
+    if(event.mouseButton.x>(view.get_starting_xpos()+xSize)) return false;
+    if(event.mouseButton.y>(view.get_starting_ypos()+ySize)) return false;
     return true;
 }
 

@@ -13,6 +13,8 @@ class MSSFMLView {
     MinesweeperBoard &board;
     sf::RectangleShape field;
     sf::Font font;
+    sf::Texture txFlag;
+    sf::Sprite spFlag;
    const int offset = 3;
    const int offsetAmout = offset*std::max(board.getBoardHeight(),board.getBoardWidth());
    const int squareSize=std::min(800-offsetAmout,600-offsetAmout)/std::max(board.getBoardWidth(),board.getBoardHeight());
