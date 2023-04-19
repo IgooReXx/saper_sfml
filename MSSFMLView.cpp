@@ -8,7 +8,7 @@ MSSFMLView::MSSFMLView(MinesweeperBoard &b) : board(b)
 {
     field = sf::RectangleShape(sf::Vector2f(squareSize, squareSize));
     field.setFillColor(sf::Color(223,223,223));
-    if(!font.loadFromFile("/home/c/275435/git/sfml_saper_igor_bujak/fonts/Ubuntu-B.ttf"))
+    if(!font.loadFromFile("../fonts/Ubuntu-B.ttf"))
     {
         exit(1);
     }
@@ -51,7 +51,7 @@ char MSSFMLView::field_char(int row, int col)
     return board.getFieldInfo(row, col);
 }
 
-int MSSFMLView::get_startig_xpos() const
+int MSSFMLView::get_starting_xpos() const
 {
     return starting_xpos;
 }

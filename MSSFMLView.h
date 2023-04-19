@@ -23,7 +23,7 @@ public:
     MSSFMLView(MinesweeperBoard &b);
 
     void draw(sf::RenderWindow & win);
-   int get_startig_xpos() const;
+   int get_starting_xpos() const;
    int get_starting_ypos() const;
    int get_offset() const;
    int get_squareSize() const;
