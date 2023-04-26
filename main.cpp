@@ -4,6 +4,7 @@
 #include "MSTextController.h"
 #include "MSSFMLView.h"
 #include "MSSFMLController.h"
+#include "iostream"
 int main() {
     //MinesweeperBoard plansza(7, 4,DEBUG);
     //MSBoardTextView view(plansza);
