@@ -7,6 +7,7 @@
 #include <algorithm>
 #include <vector>
 #include <random>
+#include <chrono>
 
 
 MinesweeperBoard::MinesweeperBoard()
@@ -140,9 +141,15 @@ void MinesweeperBoard::board_field_randomize()
     {
         indxList.push_back(indx);
     }
-    std::random_device rd;
-    std::mt19937 g(rd());                                   // Inicjacja 3. argumentu z https://en.cppreference.com/w/cpp/algorithm/random_shuffle
-    shuffle (indxList.begin(), indxList.end(), g);
+
+    unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
+    shuffle (indxList.begin(), indxList.end(), std::default_random_engine(seed)); // Inicjacja 3. argumentu https://cplusplus.com/reference/algorithm/shuffle/
+
+    for(int i=0; i<boardSize; i++)
+    {
+        std::cout << indxList[i] << " ";
+    }
+    std::cout << std::endl;
 
     int row, col;
     for(int mineNo=0; mineNo<mineAmount; mineNo++)
@@ -283,7 +290,12 @@ void MinesweeperBoard::revealField(int row, int col)
     {
         moveNo++;
         board[row][col].isRevealed=true;
+        if(getFieldInfo(row, col)==' ')
+        {
+            reveal_all_empty_fields(row, col);
+        }
         isFirstMove=false;
+        checkForWinCondition();
         return;
     }
 
@@ -300,6 +312,10 @@ void MinesweeperBoard::revealField(int row, int col)
                         board[row][col].isRevealed=true;
                         board[rowindx][colindx].hasMine=true;
                         mineMoved=true;
+                        if(getFieldInfo(row, col)==' ')
+                        {
+                            reveal_all_empty_fields(row, col);
+                        }
                         break;
                     }
                 }
@@ -360,4 +376,99 @@ void MinesweeperBoard::checkForWinCondition()
     {
         state=FINISHED_WIN;
     }
+}
+
+void MinesweeperBoard::reveal_all_empty_fields(int row, int col)
+{
+    int rowChk=row-1;
+    int colChk;
+
+    for(int rowIndx=0; rowIndx<3; rowIndx++)
+    {
+        colChk=col-1;
+        for(int colIndx=0; colIndx<3; colIndx++)
+        {
+            if(!isRevealed(rowChk, colChk))
+            {
+                revealField(rowChk,colChk);
+            }
+            colChk+=1;
+        }
+        rowChk+=1;
+    }
+}
+
+void MinesweeperBoard::init()
+{
+    if(mode != DEBUG)
+    {
+        board_field_randomize();
+        state=RUNNING;
+    }
+    else
+    {
+        board_debug_field2();
+        state=RUNNING;
+    }
+}
+
+void MinesweeperBoard::restart()
+{
+    moveNo=0;
+    isFirstMove=true;
+    board_clear();
+    init();
+}
+
+void MinesweeperBoard::reveal_adjacent(int row, int col)
+{
+    if(!is_inside_board(row, col)) return;
+    if(getFieldInfo(row, col) == (countFlags(row, col))+'0' )
+    {
+        int rowChk=row-1;
+        int colChk;
+
+        for(int rowIndx=0; rowIndx<3; rowIndx++)
+        {
+            colChk=col-1;
+            for(int colIndx=0; colIndx<3; colIndx++)
+            {
+                revealField(rowChk,colChk);
+                colChk+=1;
+            }
+            rowChk+=1;
+        }
+    }
+}
+
+int MinesweeperBoard::countFlags(int row, int col) const
+{
+    if(!is_inside_board(row, col))
+    {
+        return -1;
+    }
+    if(!board[row][col].isRevealed)
+    {
+        return -1;
+    }
+
+    int flagCount=0;
+    int rowChk=row-1;
+    int colChk;
+
+    for(int rowIndx=0; rowIndx<3; rowIndx++)
+    {
+        colChk=col-1;
+        for(int colIndx=0; colIndx<3; colIndx++)
+        {
+            if(hasFlag(rowChk,colChk))
+            {
+                flagCount++;
+            }
+            colChk+=1;
+        }
+        rowChk+=1;
+    }
+
+    return flagCount;
 }

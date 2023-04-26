@@ -76,6 +76,15 @@ class MinesweeperBoard
      */
 
     bool hasMine(int row, int col) const;
+
+    void checkForWinCondition();
+
+    void reveal_all_empty_fields(int row, int col);
+
+    void init();
+
+    int countFlags(int row, int col) const;
+
 public:
     MinesweeperBoard();
     MinesweeperBoard(int width, int height, GameMode mode);
@@ -154,8 +163,10 @@ public:
      */
     char getFieldInfo(int row, int col) const;
 
+    void restart();
 
-    void checkForWinCondition();
+    void reveal_adjacent(int row, int col);
+
 
 };
 

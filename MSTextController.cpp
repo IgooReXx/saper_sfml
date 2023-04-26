@@ -65,7 +65,6 @@ void MSTextController::play()
             default:
                 break;
         }
-        board.checkForWinCondition();
     }
     if(board.getGameState()==FINISHED_LOSS)
     {

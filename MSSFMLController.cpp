@@ -4,6 +4,7 @@
 
 #include "MSSFMLController.h"
 #include "SFML/Graphics.hpp"
+#include <iostream>
 
 
 MSSFMLController::MSSFMLController(MinesweeperBoard &b, MSSFMLView &v, sf::RenderWindow &w) : board(b), view(v), window(w)
@@ -11,7 +12,8 @@ MSSFMLController::MSSFMLController(MinesweeperBoard &b, MSSFMLView &v, sf::Rende
 
 void MSSFMLController::play(sf::Event &event)
 {
-    if(!isInsideArea(event.mouseButton.x, event.mouseButton.y))
+
+    if(!isInsideArea(event))
     {
         return;
     }
@@ -29,17 +31,21 @@ void MSSFMLController::play(sf::Event &event)
     {
         board.toggleFlag(row, col);
     }
+    else if (event.mouseButton.button == sf::Mouse::Middle)
+    {
+        board.reveal_adjacent(row, col);
+    }
 }
 
 
-bool MSSFMLController::isInsideArea(int xpos, int ypos)
+bool MSSFMLController::isInsideArea(sf::Event &event)
 {
     int xSize=view.get_squareSize()*board.getBoardWidth()+view.get_offset()*(board.getBoardWidth()-1);
     int ySize=view.get_squareSize()*board.getBoardHeight()+view.get_offset()*(board.getBoardHeight()-1);
-    if(xpos<view.get_starting_xpos()) return false;
-    if(ypos<view.get_starting_ypos()) return false;
-    if(xpos>(view.get_starting_xpos()+xSize)) return false;
-    if(ypos>(view.get_starting_ypos()+ySize)) return false;
+    if(event.mouseButton.x<view.get_starting_xpos()) return false;
+    if(event.mouseButton.y<view.get_starting_ypos()) return false;
+    if(event.mouseButton.x>(view.get_starting_xpos()+xSize)) return false;
+    if(event.mouseButton.y>(view.get_starting_ypos()+ySize)) return false;
     return true;
 }
 

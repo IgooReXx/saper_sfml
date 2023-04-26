@@ -32,7 +32,6 @@ if (WIN32)
     set ( SFML_DIR "C:/SFML-2.5.1/lib/cmake/SFML/")
 endif(WIN32)
 
-
 find_package(SFML 2.5.1 COMPONENTS graphics audio REQUIRED)
 
 add_executable(Saper main.cpp MinesweeperBoard.cpp MSBoardTextView.cpp MSBoardTextView.h MSTextController.cpp MSTextController.h MSSFMLView.cpp MSSFMLView.h MSSFMLController.cpp MSSFMLController.h)
