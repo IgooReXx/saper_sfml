@@ -27,6 +27,10 @@ int main() {
 
     while (window.isOpen())
     {
+        if(board.getGameState()!=RUNNING)
+        {
+            break;
+        }
         sf::Event event;
 
         while (window.pollEvent(event))
