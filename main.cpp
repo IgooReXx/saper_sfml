@@ -4,7 +4,7 @@
 #include "MSTextController.h"
 #include "MSSFMLView.h"
 #include "MSSFMLController.h"
-#include "iostream"
+
 int main() {
     //MinesweeperBoard plansza(7, 4,DEBUG);
     //MSBoardTextView view(plansza);
@@ -13,9 +13,9 @@ int main() {
     //ctrl.play();
 
 
-    MinesweeperBoard board(10, 10, DEBUG);
+    MinesweeperBoard board(10, 10, EASY);
     MSSFMLView view (board);
-    board.debug_display();
+    //board.debug_display();
 
     //board.toggleFlag(0,0);
     //board.revealField(2,3);
@@ -43,7 +43,6 @@ int main() {
                 if (event.key.code == sf::Keyboard::R)
                 {
                     board.restart();
-                    board.debug_display();
                 }
             }
         }

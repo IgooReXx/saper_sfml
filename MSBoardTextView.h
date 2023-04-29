@@ -13,9 +13,12 @@ class MSBoardTextView {
         Returns "█" as a character if field is not revealed.
      */
 
-    char field_char(int row,int col);
+    char field_char(int row,int col) const;
 public:
-    void display();
+    /*
+        Displays players view of the board.
+    */
+    void display() const;
     MSBoardTextView(MinesweeperBoard &b);
 };
 

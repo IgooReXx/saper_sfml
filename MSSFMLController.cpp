@@ -38,7 +38,7 @@ void MSSFMLController::play(sf::Event &event)
 }
 
 
-bool MSSFMLController::isInsideArea(sf::Event &event)
+bool MSSFMLController::isInsideArea(sf::Event &event) const
 {
     int xSize=view.get_squareSize()*board.getBoardWidth()+view.get_offset()*(board.getBoardWidth()-1);
     int ySize=view.get_squareSize()*board.getBoardHeight()+view.get_offset()*(board.getBoardHeight()-1);
@@ -49,7 +49,7 @@ bool MSSFMLController::isInsideArea(sf::Event &event)
     return true;
 }
 
-bool MSSFMLController::isInsideField(sf::Event &event)
+bool MSSFMLController::isInsideField(sf::Event &event) const
 {
     int mousexpos=event.mouseButton.x-view.get_starting_xpos();
     int mouseypos=event.mouseButton.y-view.get_starting_ypos();

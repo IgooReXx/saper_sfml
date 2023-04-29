@@ -76,9 +76,9 @@ void MSTextController::play()
     }
 }
 
-bool MSTextController::checkForInteger(std::string str)
+bool MSTextController::checkForInteger(std::string str) const
 {
-    for(int indx=0; indx<str.length(); indx++)
+    for(int indx=0; indx<static_cast<int>(str.length()); indx++)
     {
         if(!isdigit(str[indx]))
         {

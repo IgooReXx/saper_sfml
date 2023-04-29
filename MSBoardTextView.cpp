@@ -7,7 +7,7 @@
 
 MSBoardTextView::MSBoardTextView(MinesweeperBoard &b) : board(b) {}
 
-char MSBoardTextView::field_char(int row, int col)
+char MSBoardTextView::field_char(int row, int col) const
 {
     if(board.getFieldInfo(row, col)=='_')
     {
@@ -16,13 +16,13 @@ char MSBoardTextView::field_char(int row, int col)
         return board.getFieldInfo(row, col);
 }
 
-void MSBoardTextView::display()
+void MSBoardTextView::display() const
 {
     for(int row=0; row<board.getBoardHeight(); row++)
     {
         for(int col=0; col<board.getBoardWidth(); col++)
         {
-            std::cout <<' ' << field_char(row,col);
+            std::cout << ' ' << field_char(row,col);
         }
         std::cout<< std::endl;
     }

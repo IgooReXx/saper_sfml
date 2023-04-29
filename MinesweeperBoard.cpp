@@ -145,12 +145,6 @@ void MinesweeperBoard::board_field_randomize()
     unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
     shuffle (indxList.begin(), indxList.end(), std::default_random_engine(seed)); // Inicjacja 3. argumentu https://cplusplus.com/reference/algorithm/shuffle/
 
-    for(int i=0; i<boardSize; i++)
-    {
-        std::cout << indxList[i] << " ";
-    }
-    std::cout << std::endl;
-
     int row, col;
     for(int mineNo=0; mineNo<mineAmount; mineNo++)
     {
@@ -302,20 +296,15 @@ void MinesweeperBoard::revealField(int row, int col)
         bool mineMoved=false;
         if(isFirstMove and mode!=DEBUG)
         {
-            for(int rowindx=0; rowindx<width; rowindx++)
+            for(int rowindx=0; rowindx<height; rowindx++)
             {
-                for(int colindx=0; colindx<height; colindx++)
+                for(int colindx=0; colindx<width; colindx++)
                 {
                     if(!board[rowindx][colindx].hasMine)
                     {
-                        board[row][col].hasMine=false;
-                        board[row][col].isRevealed=true;
                         board[rowindx][colindx].hasMine=true;
                         mineMoved=true;
-                        if(getFieldInfo(row, col)==' ')
-                        {
-                            reveal_all_empty_fields(row, col);
-                        }
+                        removeMine(row, col);
                         break;
                     }
                 }
@@ -400,6 +389,9 @@ void MinesweeperBoard::reveal_all_empty_fields(int row, int col)
 
 void MinesweeperBoard::init()
 {
+    moveNo=0;
+    isFirstMove=true;
+    board_clear();
     if(mode != DEBUG)
     {
         board_field_randomize();
@@ -414,9 +406,6 @@ void MinesweeperBoard::init()
 
 void MinesweeperBoard::restart()
 {
-    moveNo=0;
-    isFirstMove=true;
-    board_clear();
     init();
 }
 
@@ -471,4 +460,14 @@ int MinesweeperBoard::countFlags(int row, int col) const
     }
 
     return flagCount;
+}
+
+void MinesweeperBoard::removeMine(int row, int col)
+{
+    board[row][col].hasMine=false;
+    board[row][col].isRevealed=true;
+    if(getFieldInfo(row, col)==' ')
+    {
+        reveal_all_empty_fields(row, col);
+    }
 }

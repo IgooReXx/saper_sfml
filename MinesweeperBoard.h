@@ -77,13 +77,32 @@ class MinesweeperBoard
 
     bool hasMine(int row, int col) const;
 
+
+    /*
+        Checks whether win condition is met.
+     */
     void checkForWinCondition();
 
+    /*
+      Reveals fields which are empty and adjacent to them.
+     */
     void reveal_all_empty_fields(int row, int col);
 
+    /*
+        Sets the initial state of the board.
+    */
     void init();
 
+
+    /*
+        Counts flags in adjacent fields.
+    */
     int countFlags(int row, int col) const;
+
+    /*
+        Removes mine and reveals the field.
+    */
+    void removeMine(int row, int col);
 
 public:
     MinesweeperBoard();
@@ -163,8 +182,14 @@ public:
      */
     char getFieldInfo(int row, int col) const;
 
+    /*
+        Restarts the state of the board.
+    */
     void restart();
 
+    /*
+        Reveals adjacent fields.
+    */
     void reveal_adjacent(int row, int col);
 
 

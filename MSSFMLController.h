@@ -13,10 +13,16 @@ class MSSFMLController {
     MinesweeperBoard &board;
     MSSFMLView &view;
     sf::RenderWindow &window;
-    bool isInsideArea(sf::Event &event);
-    bool isInsideField(sf::Event &event);
+    /*
+        Both functions check wether event happened inside of playable area
+    */
+    bool isInsideArea(sf::Event &event) const;
+    bool isInsideField(sf::Event &event) const;
 public:
     MSSFMLController(MinesweeperBoard &b, MSSFMLView &v, sf::RenderWindow &w);
+    /*
+        Allows for interaction with board through mouse input.
+    */
     void play(sf::Event &event);
 };
 

@@ -11,9 +11,15 @@
 class MSTextController {
     MinesweeperBoard &board;
     MSBoardTextView &view;
-    bool checkForInteger(std::string str);
+    /*
+        Checks whether user input is an integer.
+     */
+    bool checkForInteger(std::string str) const;
 public:
     MSTextController(MinesweeperBoard &b, MSBoardTextView &v);
+    /*
+        Allows for interaction with board through text input.
+    */
     void play();
 };
 
